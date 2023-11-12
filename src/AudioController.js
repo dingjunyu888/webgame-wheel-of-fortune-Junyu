@@ -1,52 +1,68 @@
 import React, { useState, useEffect, useRef } from 'react';
-import muteIcon from './assets/mute-icon.png'; 
+import muteIcon from './assets/mute-icon.png';
 import unmuteIcon from './assets/unmute-icon.png';
+import winSound from './assets/winSound.mp3';
+import loseSound from './assets/loseSound.mp3';
 
-const AudioController = ({ audioFile }) => {
+const AudioController = ({ audioFile, playWinSound, playLoseSound }) => {
+  const [isMuted, setIsMuted] = useState(true);
+  const bgmAudioRef = useRef(new Audio(audioFile));
+  const winAudioRef = useRef(new Audio(winSound));
+  const loseAudioRef = useRef(new Audio(loseSound)); // Corrected variable name here
 
-    const [isMuted, setIsMuted] = useState(true); // Start muted to comply with autoplay policies
-    const audioRef = useRef(null);
-    
-    useEffect(() => {
-        // Create new audio object with the file
-        const audio = new Audio(audioFile);
-        audio.loop = true;
-        audio.volume = 0.5;
-        audio.muted = isMuted;
-        audio.autoplay = true;
-        audioRef.current = audio;
-    
-        // Attempt to play the audio
-        audio.play().catch((error) => {
-          console.error('Autoplay was prevented:', error);
-        });
-        
-        // Cleanup function to pause the audio when component unmounts
-        return () => {
-          audio.pause();
-        };
-      }, [audioFile, isMuted]);
-    
-      const toggleMute = () => {
-        if (audioRef.current) {
-          audioRef.current.muted = !isMuted;
-          setIsMuted(!isMuted);
-    
-          // If unmuting, make sure the audio plays
-          if (isMuted) {
-            audioRef.current.play().catch((error) => {
-              console.error('Error occurred while trying to play audio:', error);
-            });
-          }
-        }
-      };
-    
-      return (
-        <button onClick={toggleMute} className="mute-button">
-          <img src={isMuted ? unmuteIcon : muteIcon} alt="Mute/Unmute" />
-        </button>
-      );
+  useEffect(() => {
+    // Set up the background music audio
+    const bgmAudio = bgmAudioRef.current;
+    bgmAudio.loop = true;
+    bgmAudio.volume = 0.5;
+    bgmAudio.muted = isMuted;
+    bgmAudio.autoplay = true;
+
+    // Attempt to play the background music
+    bgmAudio.play().catch((error) => {
+      console.error('Autoplay of background music was prevented:', error);
+    });
+
+    // Set up the victory and lose sound audio
+    winAudioRef.current.muted = isMuted;
+    loseAudioRef.current.muted = isMuted; // Use the correct reference here
+
+    // Cleanup function to pause the audio when component unmounts
+    return () => {
+      bgmAudio.pause();
+      winAudioRef.current.pause();
+      loseAudioRef.current.pause(); // Corrected method call here
     };
-    
-    export default AudioController;
-    
+  }, [audioFile, isMuted]);
+
+  useEffect(() => {
+    // Play the victory or lose sound based on the props
+    if (playWinSound) {
+      bgmAudioRef.current.pause();
+      winAudioRef.current.play().catch((error) => {
+        console.error('Playback of victory sound was prevented:', error);
+      });
+    } else if (playLoseSound) {
+      bgmAudioRef.current.pause();
+      loseAudioRef.current.play().catch((error) => {
+        console.error('Playback of lose sound was prevented:', error);
+      });
+    }
+  }, [playWinSound, playLoseSound]);
+
+  const toggleMute = () => {
+    const isNowMuted = !isMuted;
+    setIsMuted(isNowMuted);
+    bgmAudioRef.current.muted = isNowMuted;
+    winAudioRef.current.muted = isNowMuted;
+    loseAudioRef.current.muted = isNowMuted;
+  };
+
+  return (
+    <button onClick={toggleMute} className="mute-button">
+      <img src={isMuted ? unmuteIcon : muteIcon} alt="Mute/Unmute" />
+    </button>
+  );
+};
+
+export default AudioController;
