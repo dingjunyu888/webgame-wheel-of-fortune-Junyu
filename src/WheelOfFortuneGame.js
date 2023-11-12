@@ -14,6 +14,7 @@ function WheelOfFortuneGame() {
   const [gameOver, setGameOver] = useState(false);
   const [score, setScore] = useState(0);
   const [guessedLetters, setGuessedLetters] = useState([]);
+  const [hasLost, setHasLost] = useState(false);
 
   useEffect(() => {
     setNumOfGuessesAllowed(10);
@@ -49,11 +50,6 @@ function WheelOfFortuneGame() {
       alert('You have already guessed this letter before');
       return;
     }
-
-    // if(!phrase.includes(userGuess.toLowerCase())){
-    //   alert('Wrong letter');
-    //   return;
-    // }
 
     if (!userGuess) {
       alert('Please enter a letter');
@@ -91,10 +87,11 @@ function WheelOfFortuneGame() {
   };
 
   const checkWinLoss = (hasCorrectGuess) => {
-    if (hiddenPhrase === phrase) {
-      setScore(score + (numOfGuessesAllowed - numOfGuess) * 5); // 每剩余一次猜测加5分
-    }
+    const won = hiddenPhrase === phrase;
     setGameOver(true);
+    if (!won) {
+      setHasLost(true);
+    }
   };
 
   const handleNumOfGuessesChange = (e) => {
@@ -130,6 +127,7 @@ function WheelOfFortuneGame() {
     setGameOver(false);
     setScore(0);
     setGuessedLetters([]);
+    setHasLost(false);
   };
 
   const purchaseExtraGuesses = () => {
@@ -149,12 +147,18 @@ function WheelOfFortuneGame() {
     }
   };
 
+  const hasWon = hiddenPhrase === phrase;
+
   return (
     <div className="WheelOfFortuneGame">
       <header>
         <h1>Wheel of Fortune</h1>
       </header>
-      <AudioController audioFile="https://dl.vgmdownloads.com/soundtracks/super-mario-bros.-the-30th-anniversary/weknekelam/1-01.%20Ground%20BGM%20-%20Super%20Mario%20Bros..mp3" />
+      <AudioController 
+        audioFile="https://dl.vgmdownloads.com/soundtracks/super-mario-bros.-the-30th-anniversary/weknekelam/1-01.%20Ground%20BGM%20-%20Super%20Mario%20Bros..mp3" 
+        playWinSound={hiddenPhrase === phrase && gameOver}
+        playLoseSound={gameOver && hasLost}
+      />
       <div className="wheel-container">
         <img src={wheelImage} alt="Wheel of Fortune" />
       </div>
@@ -183,7 +187,10 @@ function WheelOfFortuneGame() {
               {hiddenPhrase === phrase ? (
                 <h2 className="congrats-info">Congratulations! You Win!!</h2>
               ) : (
-                <h2>Game Over. The correct phrase was: {phrase}. You missed {numOfIncorrect} times.</h2>
+                <div>
+                  <h2 className="lose-info">Game Over</h2>
+                  <p>The correct phrase was: {phrase}. You missed {numOfIncorrect} times.</p>
+                </div>
               )}
               <p>Your final score is: {score}</p>
               <button onClick={promptRestartGame}>Play Again</button>

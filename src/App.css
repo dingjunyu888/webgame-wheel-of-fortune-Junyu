@@ -106,9 +106,15 @@ header h1 {
 }
 
 .congrats-info{
-  font-size: 2.5em;
+  font-size: 5em;
   font-family: 'PixelFont', sans-serif;
-  color:#e73221f6;
+  color:#e75321f6;
+}
+
+.lose-info{
+  font-size: 4em;
+  font-family: 'PixelFont', sans-serif;
+  color:#ab230ef6;
 }
 
 button {
