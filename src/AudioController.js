@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import muteIcon from './assets/mute-icon.png'; // Replace with your mute icon path
-import unmuteIcon from './assets/unmute-icon.png'; // Replace with your unmute icon path
+import muteIcon from './assets/mute-icon.png'; 
+import unmuteIcon from './assets/unmute-icon.png';
 
 const AudioController = ({ audioFile }) => {
 
