@@ -3,6 +3,19 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 This project is a web-based version of the classic TV game show Wheel of Fortune. Players can guess letters to fill in the blanks of a hidden phrase. With each correct guess, players earn 10 points, and incorrect guesses loss 1 point. This project is 
 
+## Technology Stack
+
+This Wheel of Fortune game is a web-based application built using the following technologies:
+
+- **JavaScript (JS)**: The core programming language used to implement game logic and interactive features.
+- **Cascading Style Sheets (CSS)**: Used for styling the presentation of the game, including layout, colors, and fonts.
+- **Hypertext Markup Language (HTML)**: The markup language used to structure and display content on the web page.
+- **React**: A JavaScript library for building user interfaces, facilitating the dynamic rendering of components.
+- **Node.js**: The JavaScript runtime environment used to run the application on a server.
+- **npm (Node Package Manager)**: Used to manage the application's dependencies and to run scripts for development and deployment.
+
+The application leverages React's component-based architecture, allowing for a modular and maintainable codebase. The use of Node.js and npm enables a streamlined development process, with a wealth of libraries and tools readily available to enhance functionality and performance.
+
 ## Features
 
 - Random phrase generation from a predefined list of phrases
