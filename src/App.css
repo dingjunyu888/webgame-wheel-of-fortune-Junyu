@@ -42,6 +42,12 @@ header {
        url('./wof-front.TTF') format('truetype'); /* Fallback for older browsers */
 }
 
+p {
+  font-family: 'PixelFont', sans-serif;
+  font-size: 1.0em;
+  color: #333;
+}
+
 header h1 {
   font-family: 'PixelFont', sans-serif; /* Use the custom pixel font */
 }

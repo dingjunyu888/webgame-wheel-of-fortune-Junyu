@@ -2,6 +2,7 @@ import wheelImage from './wheel.png';
 import AudioController from './AudioController';
 import './App.css';
 import React, { useState, useEffect } from 'react';
+import LoginForm from './LoginForm';
 
 function WheelOfFortuneGame() {
   const [numOfGuessesAllowed, setNumOfGuessesAllowed] = useState(0);
@@ -15,6 +16,13 @@ function WheelOfFortuneGame() {
   const [score, setScore] = useState(0);
   const [guessedLetters, setGuessedLetters] = useState([]);
   const [hasLost, setHasLost] = useState(false);
+
+  const [user, setUser] = useState(null);
+
+  function HandleLogin(user) {
+		setUser(user);
+	}
+
 
   useEffect(() => {
     setNumOfGuessesAllowed(10);
@@ -162,7 +170,9 @@ function WheelOfFortuneGame() {
       <div className="wheel-container">
         <img src={wheelImage} alt="Wheel of Fortune" />
       </div>
-      {userEnteredGuesses ? (
+      <LoginForm LoginEvent={HandleLogin}/>
+      {user? 
+      (userEnteredGuesses ? (
         <>
           <div className="phrase-display">The phrase is: {phrase}</div>
           <div className="hidden-phrase-display">Hidden Phrase: {hiddenPhrase}</div>
@@ -201,9 +211,10 @@ function WheelOfFortuneGame() {
         <div className="start-container">
           <button onClick={startGame}>Start Game</button>
         </div>
-      )}
+      )) : <br/>
+      }
       <footer>
-        <p>CS514 - Web Game Project - Made by Junyu and Xueting</p>
+        <p1>CS514 - Web Game Project - Made by Junyu and Xueting</p1>
       </footer>
     </div>
   );
