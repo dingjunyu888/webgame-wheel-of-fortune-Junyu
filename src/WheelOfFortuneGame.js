@@ -3,6 +3,7 @@ import AudioController from './AudioController';
 import './App.css';
 import React, { useState, useEffect } from 'react';
 import LoginForm from './LoginForm';
+import ScoreBoard from './ScoreBoard';
 
 function WheelOfFortuneGame() {
   const [numOfGuessesAllowed, setNumOfGuessesAllowed] = useState(0);
@@ -204,6 +205,7 @@ function WheelOfFortuneGame() {
               )}
               <p>Your final score is: {score}</p>
               <button onClick={promptRestartGame}>Play Again</button>
+              <ScoreBoard/>
             </div>
           )}
         </>
