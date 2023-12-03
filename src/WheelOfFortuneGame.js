@@ -4,6 +4,7 @@ import './App.css';
 import React, { useState, useEffect } from 'react';
 import LoginForm from './LoginForm';
 import ScoreBoard from './ScoreBoard';
+import moment from "moment";
 
 function WheelOfFortuneGame() {
   const [numOfGuessesAllowed, setNumOfGuessesAllowed] = useState(0);
@@ -17,6 +18,8 @@ function WheelOfFortuneGame() {
   const [score, setScore] = useState(0);
   const [guessedLetters, setGuessedLetters] = useState([]);
   const [hasLost, setHasLost] = useState(false);
+  const [userName, setUserName] = useState('');
+  const [userEnteredName, setUserEnteredName] = useState(false);
 
   const [user, setUser] = useState(null);
 
@@ -24,9 +27,9 @@ function WheelOfFortuneGame() {
 		setUser(user);
 	}
 
-
+  //number of guesses allowed
   useEffect(() => {
-    setNumOfGuessesAllowed(10);
+    setNumOfGuessesAllowed(1);
     fetchRandomPhrase();
   }, []);
 
@@ -43,6 +46,14 @@ function WheelOfFortuneGame() {
   const generateHiddenPhrase = (phrase) => {
     return phrase.replace(/[a-zA-Z]/g, '*');
   };
+
+  const handleNameChange = () => {
+    if(!userEnteredName){
+      setUserEnteredName(true);
+    }else{
+      setUserEnteredName(false);
+    }
+  }
 
   const handleGuess = () => {
     if (!userGuess.match(/[a-zA-Z]/)) {
@@ -171,6 +182,23 @@ function WheelOfFortuneGame() {
       <div className="wheel-container">
         <img src={wheelImage} alt="Wheel of Fortune" />
       </div>
+      {!userEnteredName ? (
+        
+              <div className="input-container">
+              <input
+                type="text"
+                placeholder='Enter  User  Name'
+                value={userName}
+                onChange={(e) => setUserName(e.target.value)}
+              />
+              <button onClick={handleNameChange}>save</button>
+          </div>
+      ) : (
+              <div className="name-container">
+              <p>{userName}</p>
+              <button className="button" onClick={handleNameChange}>change</button>
+            </div>
+      )}
       <LoginForm LoginEvent={HandleLogin}/>
       {user? 
       (userEnteredGuesses ? (
@@ -203,9 +231,8 @@ function WheelOfFortuneGame() {
                   <p>The correct phrase was: {phrase}. You missed {numOfIncorrect} times.</p>
                 </div>
               )}
-              <p>Your final score is: {score}</p>
               <button onClick={promptRestartGame}>Play Again</button>
-              <ScoreBoard/>
+              <ScoreBoard gameScore={score} user={user} userGameName={userName}/>
             </div>
           )}
         </>
